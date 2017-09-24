@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090,SC2155
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+[[ -n "${TRACE+x}" ]] && set -o xtrace
+
+readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
+
+source "$SCRIPT_DIR"/env.bash
+
+create_ref() {
+  local filepath=$1
+  local refDir=$2
+  unzip -p "$filepath" mapdata.xml | ag -o --nocolor '(?<=text=").+?(?=")' > "$refDir"/data
+}
+
+get_cksum() {
+  local filepath=$1
+  cksum "$filepath" | cut -d ' ' -f 1
+}
+
+create_cksum() {
+  local filepath=$1
+  local refDir=$2
+  get_cksum "$filepath" > "$refDir"/cksum
+}
+
+is_itmz_nochange() {
+  local filepath=$1
+  local refDir=$2
+
+  if [[ ! -r "$refDir"/cksum ]]; then
+    echo "$refDir/cksum not existed. To create cksum..." >> "$ITMZ_LOG"
+    echo "To add new file=${filepath} to ref"
+    return 1
+  fi
+
+  local cksum=$(get_cksum "$filepath")
+  local old_cksum=$(cat "$refDir"/cksum)
+  if [[ "$old_cksum" != "$cksum" ]]; then
+    echo "[cksum=$cksum] != [$refDir/cksum=$(cat "$refDir"/cksum)]" >> "$ITMZ_LOG"
+    echo "File=${filepath} content changed, to refresh ref. ${old_cksum} => ${cksum}"
+    return 1
+  fi
+
+  return 0
+}
+
+iterator() {
+  local filepath=$1
+  local refDir=$ITMZ_REF_DIR/"$filepath"
+
+  {
+    echo "[filepath=${filepath}]"; \
+    echo "[refDir=${refDir}]"; \
+  } >> "$ITMZ_LOG"
+
+  mkdir -p "$refDir"
+
+  if is_itmz_nochange "$filepath" "$refDir"; then
+    echo "File content no change: $filepath" >> "$ITMZ_LOG"
+    return 0
+  else
+    echo "File content has changed: $filepath" >> "$ITMZ_LOG"
+  fi
+
+  create_ref "${filepath}" "$refDir"
+  create_cksum "${filepath}" "$refDir"
+}
+
+main() {
+  local pattern=${1:-}
+  local dir=${2:-}
+  local search_dir=$(realpath "$ITMZ_DIR"/"$dir")
+
+  if [[ $pattern == '-h' ]] || [[ $pattern == '--help' ]] || [[ $pattern == '' ]]; then
+    "$SCRIPT_DIR"/search-usage
+    exit 0;
+  fi
+
+  echo "[$APP_NAME] To search pattern=${pattern} in dir=${search_dir}"
+
+  if [[ -z "$search_dir" ]]; then
+    echo "[$APP_NAME] search_dir is empty" >&2
+    exit 1
+  fi
+
+  if [[ ! -e "$search_dir" ]]; then
+    echo "[$APP_NAME] No such directory: $search_dir" >&2
+    exit 1
+  fi
+
+  mkdir -p "$ITMZ_HOME"
+  date > "$ITMZ_LOG"
+
+  while read -r -d '' filepath; do
+    iterator "$filepath"
+  done < <(find "$search_dir" -type f -name '*.itmz' -print0)
+
+  local IFS=$'\n'
+  files=($(ag -l --nocolor "$pattern" "$ITMZ_REF_DIR""$search_dir"))
+  # ag "$pattern" "${files[@]}"
+
+  for file in "${files[@]}"; do
+    echo ""
+    echo "${file}" | sed -e "s|^${ITMZ_REF_DIR}|${LIGHT_GREEN}|g" -e "s|/data$|${RESET_COLOR}|g"
+    ag "$pattern" "$file"
+  done
+}
+
+main "${@}"

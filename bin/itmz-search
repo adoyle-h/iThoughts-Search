@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090,SC2155
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+[[ -n "${TRACE+x}" ]] && set -o xtrace
+
+readonly SCRIPT_BASENAME="$(basename "$0")"
+# readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
+# readonly SCRIPT_PATH="${SCRIPT_DIR}/$SCRIPT_BASENAME"
+readonly SCRIPT_PATH="$(realpath "$0")"
+readonly SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+## package.json
+
+declare -A package
+package["name"]="itmz-search"
+package["version"]="0.1.0"
+package["description"]="A command for searching content from multi iThoughts (.itmz) files."
+package["scripts"]=["src/search"]
+package["files"]=["src/clean"]
+
+if [[ ${BASH_SOURCE[0]} != "$0" ]]; then
+  echo "This script cannot be sourced" >&2
+  exit 1
+fi
+
+source "$SCRIPT_DIR"/../src/wrapper.bash
+
+# It is related to project root path
+readonly script="src/search"
+wrapper "$SCRIPT_DIR"/../"$script" "${@}"

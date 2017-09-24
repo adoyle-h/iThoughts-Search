@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090,SC2155
+set -o errexit
+set -o nounset
+set -o pipefail
+[[ -n "${TRACE+x}" ]] && set -o xtrace
+
+
+ITMZ_DIR=${ITMZ_DIR:-/Users/adoyle/Doc/My-Knowledge}
+ITMZ_HOME=${ITMZ_HOME:-~/itmz}
+ITMZ_REF_DIR=$ITMZ_HOME/refs
+ITMZ_LOG=$ITMZ_HOME/itmz.log
+APP_NAME=itm
+
+run() {
+  local dir=${1:-}
+  local search_dir=$(realpath "$ITMZ_DIR"/"$dir")
+  local target_dir="$ITMZ_REF_DIR"/"$search_dir"
+
+  if [[ -z "$target_dir" ]]; then
+    echo "target_dir is empty" >&2
+    exit 1
+  fi
+
+  if [[ "$target_dir" == '/' ]] || [[ "$target_dir" == "$HOME" ]]; then
+    echo "Dangerous! You cannot remove the files in $target_dir" >&2
+    exit 1
+  fi
+
+  echo "To clean $target_dir"
+
+  rm -rf "${target_dir:?}"/*
+
+  echo "All Cleaned"
+}
+
+run "$@"
