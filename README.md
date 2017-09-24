@@ -1,6 +1,6 @@
 # iThoughts-Search
 
-A command for searching content from multi iThoughts (.itmz) files.
+A bash command for searching content from multi iThoughts (.itmz) files.
 
 ## TOC
 
@@ -19,6 +19,7 @@ A command for searching content from multi iThoughts (.itmz) files.
 
 ## Dependencies
 
+- GNU bash, 4.4.12(1)-release or above
 - .itmz files created by iThoughts 4.12 or above
 - [ag](https://github.com/ggreer/the_silver_searcher)
 - cksum
@@ -26,9 +27,9 @@ A command for searching content from multi iThoughts (.itmz) files.
 
 ## Install
 
-1. git clone https://github.com/adoyle-h/iThoughts-Search <repo-path>
-2. echo "ITMZ_DIR=<your-itmz-files-dir>" >> ~/.bashrc
-3. ln -s <repo-path>/bin/itmz-search /usr/local/bin/itmz
+1. `git clone https://github.com/adoyle-h/iThoughts-Search <repo-path>`
+2. `echo "ITMZ_DIR=<your-itmz-files-dir>" >> ~/.bashrc`
+3. `ln -s <repo-path>/bin/itmz-search /usr/local/bin/itmz`
 
 
 TODO: Available as a [bpkg](http://www.bpkg.sh/)
