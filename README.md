@@ -20,15 +20,16 @@ A bash command for searching content from multi iThoughts (.itmz) files.
 ## Dependencies
 
 - GNU bash, 4.4.12(1)-release or above
-- .itmz files created by iThoughts 4.12 or above
-- [ag](https://github.com/ggreer/the_silver_searcher)
-- cksum
-- realpath
+- .itmz files must be created by iThoughts 4.12 or above
+- [`ag`](https://github.com/ggreer/the_silver_searcher)
+- `realpath`, which installed by `brew install coreutils`
+- `cksum`, system default
 
 ## Install
 
 1. `git clone https://github.com/adoyle-h/iThoughts-Search <repo-path>`
 2. `echo "ITMZ_DIR=<your-itmz-files-dir>" >> ~/.bashrc`
+    - ITMZ_DIR: all your .itmz files should be put under this path.
 3. `ln -s <repo-path>/bin/itmz-search /usr/local/bin/itmz`
 
 
@@ -41,12 +42,14 @@ bpkg install adoyle/iThoughts-Search
 ## Usage
 
 - `itmz` or `itmz -h` to display command helps
-- `itmz <pattern> [dir]` to search contents from .itmz files stored in specific directory.
+- `itmz <pattern> [dir]` to search contents with `ag` from all .itmz files stored in specific directory.
 
 ## Environment Variables
 
-```
+```sh
+# all your .itmz files should be put under this path.
 ITMZ_DIR=${ITMZ_DIR:?}
+# iThoughts-Search caches and logs will be put under the ITMZ_HOME
 ITMZ_HOME=${ITMZ_HOME:-$HOME/itmz}
 ```
 
