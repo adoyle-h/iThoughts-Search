@@ -1,6 +1,6 @@
 {
   "name": "itmz-search",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A command for searching content from multi iThoughts (.itmz) files.",
   "scripts": ["bin/itmz-search"],
   "files": ["src"]
