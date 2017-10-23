@@ -3,7 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
-[[ -n "${TRACE+x}" ]] && set -o xtrace
+[[ -n "${XTRACE+x}" ]] && set -o xtrace
 
 
 ITMZ_DIR=${ITMZ_DIR:-/Users/adoyle/Doc/My-Knowledge}

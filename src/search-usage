@@ -3,7 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
-[[ -n "${TRACE+x}" ]] && set -o xtrace
+[[ -n "${XTRACE+x}" ]] && set -o xtrace
 
 readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
