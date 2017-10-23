@@ -100,14 +100,18 @@ main() {
   done < <(find "$search_dir" -type f -name '*.itmz' -print0)
 
   local IFS=$'\n'
-  files=($(ag -l --nocolor "$pattern" "$ITMZ_REF_DIR""$search_dir"))
-  # ag "$pattern" "${files[@]}"
+  local no_matched=0
+  files=($(ag -l --nocolor "$pattern" "$ITMZ_REF_DIR""$search_dir")) || if [[ $? == 1 ]]; then no_matched=1; else exit $?; fi
 
-  for file in "${files[@]}"; do
-    echo ""
-    echo "${file}" | sed -e "s|^${ITMZ_REF_DIR}|${LIGHT_GREEN}|g" -e "s|/data$|${RESET_COLOR}|g"
-    ag "$pattern" "$file"
-  done
+  if [[ $no_matched == 1 ]]; then
+    echo "No matched content for pattern \"$pattern\"" >&2
+  else
+    for file in "${files[@]}"; do
+      echo ""
+      echo "${file}" | sed -e "s|^${ITMZ_REF_DIR}|${LIGHT_GREEN}|g" -e "s|/data$|${RESET_COLOR}|g"
+      ag "$pattern" "$file"
+    done
+  fi
 }
 
 main "${@}"
