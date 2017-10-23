@@ -4,7 +4,7 @@ set -o errexit
 set -o errtrace
 set -o nounset
 set -o pipefail
-[[ -n "${TRACE+x}" ]] && set -o xtrace
+[[ -n "${XTRACE+x}" ]] && set -o xtrace
 
 readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
@@ -70,15 +70,50 @@ iterator() {
   create_cksum "${filepath}" "$refDir"
 }
 
-main() {
-  local pattern=${1:-}
-  local dir=${2:-}
-  local search_dir=$(realpath "$ITMZ_DIR"/"$dir")
+usage() { "$SCRIPT_DIR"/search-usage; }
 
-  if [[ $pattern == '-h' ]] || [[ $pattern == '--help' ]] || [[ $pattern == '' ]]; then
-    "$SCRIPT_DIR"/search-usage
-    exit 0;
+declare -A dispatch_cmd_opts
+declare -a dispatch_cmd_args
+
+opt_parse() {
+  while [ $# -gt 0 ];do
+    case $1 in
+      -l)
+        dispatch_cmd_opts[list-file]=true
+        ;;
+      --list-file)
+        dispatch_cmd_opts[list-file]=true
+        ;;
+      -h)
+        dispatch_cmd_opts[help]=true
+        ;;
+      *)
+        dispatch_cmd_args+=($1)
+        ;;
+    esac
+    shift
+  done
+
+  # declare -p dispatch_cmd_opts
+}
+
+main() {
+  opt_parse "$@"
+
+  if [[ ${dispatch_cmd_opts[help]:-} == true ]]; then
+    usage
+    exit 0
   fi
+
+  local pattern=${dispatch_cmd_args[0]:-}
+
+  if [[ -z $pattern ]]; then
+    echo "Missing pattern" >&2
+    exit 1
+  fi
+
+  local dir=${dispatch_cmd_args[1]:-}
+  local search_dir=$(realpath "$ITMZ_DIR"/"$dir")
 
   echo "[$APP_NAME] To search pattern=${pattern} in dir=${search_dir}"
 
@@ -106,9 +141,20 @@ main() {
   if [[ $no_matched == 1 ]]; then
     echo "No matched content for pattern \"$pattern\"" >&2
   else
-    for file in "${files[@]}"; do
+    if [[ ${dispatch_cmd_opts[list-file]:-} == true ]]; then
       echo ""
-      echo "${file}" | sed -e "s|^${ITMZ_REF_DIR}|${LIGHT_GREEN}|g" -e "s|/data$|${RESET_COLOR}|g"
+      for i in "${!files[@]}"; do
+        local file=${files[i]}
+        echo "${file}" | sed -e "s|^${ITMZ_REF_DIR}|[$((i+1))] ${LIGHT_GREEN}|g" -e "s|/data$|${RESET_COLOR}|g"
+      done
+
+      exit 0
+    fi
+
+    for i in "${!files[@]}"; do
+      local file=${files[i]}
+      echo ""
+      echo "${file}" | sed -e "s|^${ITMZ_REF_DIR}|[$((i+1))] ${LIGHT_GREEN}|g" -e "s|/data$|${RESET_COLOR}|g"
       ag "$pattern" "$file"
     done
   fi

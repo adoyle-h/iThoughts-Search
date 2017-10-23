@@ -17,10 +17,11 @@ get_available_dirs() {
 
 usage() {
 cat <<EOF
-Usage: $0 [-h|--help] <pattern> [dir]
+Usage: $0 [Options] <pattern> [dir]
 
 Options:
     -h --help               Show help
+    -l --list-file          Only list filepaths which matched
 
 Parameters:
     <pattern>               Recursively search for PATTERN in <dir>.
