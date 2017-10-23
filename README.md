@@ -43,6 +43,7 @@ bpkg install adoyle/iThoughts-Search
 
 - `itmz` or `itmz -h` to display command helps
 - `itmz <pattern> [dir]` to search contents with `ag` from all .itmz files stored in specific directory.
+- `itmz -l <pattern> [dir]` to search matched filepaths with `ag` from all .itmz files stored in specific directory.
 
 ## Environment Variables
 
