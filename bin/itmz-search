@@ -16,7 +16,7 @@ readonly SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 declare -A package
 package["name"]="itmz-search"
-package["version"]="0.1.0"
+package["version"]="0.3.0"
 package["description"]="A command for searching content from multi iThoughts (.itmz) files."
 package["scripts"]=["src/search"]
 package["files"]=["src/clean"]
