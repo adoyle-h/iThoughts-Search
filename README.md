@@ -11,6 +11,7 @@ A bash command for searching content from multi iThoughts (.itmz) files.
 - [Usage](#usage)
 - [Environment Variables](#environment-variables)
 - [Example](#example)
+- [Auto-Completion](#auto-completion)
 - [Versioning](#versioning)
 - [Copyright and License](#copyright-and-license)
 
@@ -55,6 +56,16 @@ ITMZ_HOME=${ITMZ_HOME:-$HOME/itmz}
 ```
 
 ## Example
+
+## Auto-Completion
+
+```bash
+# For bash
+source <(itmz --completion)
+
+# or add it to your .bashrc to make it persist
+echo "source <(itmz --completion)" >> ~/.bashrc && source ~/.bashrc
+```
 
 ## Versioning
 

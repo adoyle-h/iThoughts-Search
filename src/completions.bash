@@ -8,7 +8,7 @@ _comp_itmz() {
   local dir_list
   dir_list=$(_itmz_get_available_dirs)
   local cur=${COMP_WORDS[COMP_CWORD]}
-  COMPREPLY=( $(compgen -W "${dir_list[@]}" -- $cur) )
+  COMPREPLY=( $(compgen -W "${dir_list[@]}" -- "$cur") )
 }
 
 complete -F _comp_itmz itmz

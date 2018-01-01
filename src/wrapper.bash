@@ -15,12 +15,6 @@ Wrapper__termination() {
 Wrapper__exit() {
     # @description signal handler for end of the program (clean or unclean).
     # probably redundant call, we already call the cleanup in main.
-
-    cd "$orig_cwd"
-
-    # Restore terminal colours
-    printf '%b' "$ta_none"
-
     exit
 }
 
@@ -53,9 +47,10 @@ Wrapper_init() {
   readonly script_path="${BASH_SOURCE[0]}"
   readonly script_dir="$(dirname "$script_path")"
   readonly script_name="$(basename "$script_path")"
+}
 
-  # Important to always set as we use it in the exit handler
-  readonly ta_none="$(tput sgr0 || true)"
+Wrapper_gen_completion() {
+  cat "$script_completion"
 }
 
 wrapper() {
@@ -69,6 +64,8 @@ wrapper() {
   local _args=(${@:2})
 
   Wrapper_init
+
+  [[ ${2:-} == '--completion' ]] && Wrapper_gen_completion && exit 0
 
   "$filepath" "${_args[@]}"
 }

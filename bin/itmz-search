@@ -30,4 +30,5 @@ source "$SCRIPT_DIR"/../src/wrapper.bash
 
 # It is related to project root path
 readonly script="src/search"
+readonly script_completion="$SCRIPT_DIR/../src/completions.bash"
 wrapper "$SCRIPT_DIR"/../"$script" "${@}"
