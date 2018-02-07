@@ -18,7 +18,7 @@ run() {
   local target_dir="$ITMZ_REF_DIR"/"$search_dir"
 
   if [[ -z "$target_dir" ]]; then
-    echo "target_dir is empty" >&2
+    echo "itmz cache directory is empty" >&2
     exit 1
   fi
 
@@ -27,11 +27,26 @@ run() {
     exit 1
   fi
 
-  echo "To clean $target_dir"
+  read -rp "To clean cache at directory: $target_dir ? (y/n [default yes])" answer
+  case $answer in
+    Y|y|Yes|yes|YES)
+      echo Yes
+      answer=yes
+      ;;
+    N|n|No|no|NO)
+      echo "No"
+      answer=no
+      ;;
+    *)
+      echo Yes
+      answer=yes
+      ;;
+  esac
 
-  rm -rf "${target_dir:?}"/*
-
-  echo "All Cleaned"
+  if [[ $answer == yes ]]; then
+    rm -rf "${target_dir:?}"/*
+    echo "All cleaned"
+  fi
 }
 
 run "$@"

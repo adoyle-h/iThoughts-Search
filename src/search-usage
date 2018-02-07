@@ -22,6 +22,7 @@ Usage: $0 [Options] <pattern> [dir]
 Options:
     -h --help               Show help
     -l --list-file          Only list filepaths which matched
+    --cache-clean           Clean all cache
 
 Parameters:
     <pattern>               Recursively search for PATTERN in <dir>.
