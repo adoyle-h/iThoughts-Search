@@ -43,7 +43,12 @@ bpkg install adoyle/iThoughts-Search
 ## Usage
 
 - `itmz` or `itmz -h` to display command helps
-- `itmz <pattern> [dir]` to search contents with `ag` from all .itmz files stored in specific directory.
+- `itmz <pattern> [dir]` to search contents with `ag` from all `.itmz` files stored in specific directory.
+  - The search pattern is case-insensitive
+  - If `dir` is omit, it will search all `.imtz` files in `$ITMZ_DIR`. Otherwise, it will search files in `$ITMZ_DIR/$dir`.
+  - Each search will generator cache to speed up for next search in ITMZ_REF_DIR which is `$ITMZ_HOME/refs`.
+  - Each search will auto-update cache if the file has been modified.
+  - If you really worry about the cache-refreshing, use `itmz --cache-clean` to clean all caches.
 - `itmz -l <pattern> [dir]` to search matched filepaths with `ag` from all .itmz files stored in specific directory.
 
 ## Environment Variables
