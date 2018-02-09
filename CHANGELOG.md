@@ -23,6 +23,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [v0.4.0] - 2018-02-09 14:16:03 +0800
+
+[Full Changelog](https://github.com/adoyle-h/iThoughts-Search/compare/v0.3.0...v0.4.0)
+
+### Add
+
+- support itmz --cache-clean
+
+### Fix
+
+- itmz should print help while no more arguments passed
+
+### Documentation
+
+- update search usage for more details
+
 ## [v0.3.0] - 2018-01-01 19:28:00 +0800
 
 [Full Changelog](https://github.com/adoyle-h/iThoughts-Search/compare/7ba0a8b...v0.3.0)
@@ -36,3 +52,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- links -->
 
 [v0.3.0]: https://github.com/adoyle-h/iThoughts-Search/tree/v0.3.0
+[v0.4.0]: https://github.com/adoyle-h/iThoughts-Search/tree/v0.4.0
