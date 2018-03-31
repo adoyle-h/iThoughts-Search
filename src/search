@@ -81,6 +81,15 @@ opt_parse() {
       --cache-clean)
         dispatch_cmd_opts[cache-clean]=true
         ;;
+      --show-envs)
+        dispatch_cmd_opts[show-envs]=true
+        ;;
+      --open-home)
+        dispatch_cmd_opts[open-home]=true
+        ;;
+      --open-dir)
+        dispatch_cmd_opts[open-dir]=true
+        ;;
       -l)
         dispatch_cmd_opts[list-file]=true
         ;;
@@ -114,6 +123,32 @@ main() {
   if [[ ${dispatch_cmd_opts[cache-clean]:-} == true ]]; then
     "$SCRIPT_DIR"/clean
     exit 0
+  fi
+
+  if [[ ${dispatch_cmd_opts[show-envs]:-} == true ]]; then
+    echo "ITMZ_HOME: $ITMZ_HOME"
+    echo "ITMZ_DIR: $ITMZ_DIR"
+    exit 0
+  fi
+
+  if [[ ${dispatch_cmd_opts[open-home]:-} == true ]]; then
+    if [[ -n "$ITMZ_HOME" ]]; then
+      open "$ITMZ_HOME"
+      exit 0
+    else
+      echo "environment ITMZ_HOME not defined"
+      exit 1
+    fi
+  fi
+
+  if [[ ${dispatch_cmd_opts[open-dir]:-} == true ]]; then
+    if [[ -n "$ITMZ_DIR" ]]; then
+      open "$ITMZ_DIR"
+      exit 0
+    else
+      echo "environment ITMZ_DIR not defined"
+      exit 1
+    fi
   fi
 
   local pattern=${dispatch_cmd_args[0]:-}

@@ -23,6 +23,9 @@ Options:
     -h --help               Show help
     -l --list-file          Only list filepaths which matched
     --cache-clean           Clean all cache
+    --show-envs             Show environment variables which ITMZ related
+    --open-home             Open home directory
+    --open-dir              Open root directory
 
 Parameters:
     <pattern>               Recursively search for PATTERN in <dir>.
