@@ -28,16 +28,21 @@ A bash command for searching content from multi iThoughts (.itmz) files.
 
 ## Install
 
-1. `git clone https://github.com/adoyle-h/iThoughts-Search <repo-path>`
-2. `echo "ITMZ_DIR=<your-itmz-files-dir>" >> ~/.bashrc`
-    - ITMZ_DIR: all your .itmz files should be put under this path.
-3. `ln -s <repo-path>/bin/itmz-search /usr/local/bin/itmz`
-
-
-TODO: Available as a [bpkg](http://www.bpkg.sh/)
-
 ```sh
-bpkg install adoyle/iThoughts-Search
+# git clone the source code
+src_dir=
+git clone https://github.com/adoyle-h/iThoughts-Search "$src_dir"
+# ITMZ_DIR: all your .itmz files should be put under this path.
+export ITMZ_DIR=
+# iThoughts-Search caches and logs will be put under the ITMZ_HOME
+export ITMZ_HOME=${ITMZ_HOME:-$HOME/.itmz}
+
+cat >> ~/.bashrc <<EOF
+export ITMZ_DIR=$ITMZ_DIR
+export ITMZ_HOME=$ITMZ_HOME
+EOF
+
+ln -s "$src_dir/bin/itmz-search" /usr/local/bin/itmz
 ```
 
 ## Usage
@@ -64,7 +69,7 @@ ITMZ_HOME=${ITMZ_HOME:-$HOME/itmz}
 
 ## Auto-Completion
 
-```bash
+```sh
 # For bash
 source <(itmz --completion)
 
@@ -83,7 +88,7 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Copyright and License
 
-Copyright (c) 2017-2018 ADoyle. The project is licensed under the **Apache License Version 2.0**.
+Copyright (c) 2017-2021 ADoyle. The project is licensed under the **Apache License Version 2.0**.
 
 See the [LICENSE][] file for the specific language governing permissions and limitations under the License.
 
